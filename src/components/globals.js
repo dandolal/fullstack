@@ -1,7 +1,15 @@
 let problems_list = [
-    {name : 'Первая',},
-    {name : 'Вторая',},
-    {name : 'Третья',},
+    {name: 'Первая',
+        task: 'Решите первую задачу',
+        solution: 'Решение первой задачи',
+        level_min: '9',
+        level_max: '11',
+        author: 'Автор',
+
+    },
+    {name: 'Вторая',},
+    {name: 'Третья',},
 ];
 
-export {problems_list};
+let user = {isLogged: false, name: 'Петя'}
+export {problems_list, user};

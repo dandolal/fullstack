@@ -1,5 +1,6 @@
 import React from 'react';
-import {problems_list} from "./globals";
+import {problems_list, user} from "./globals";
+import Header from "../model";
 
 class EditForm extends React.Component {
     constructor({match, location}, props) {
@@ -24,13 +25,16 @@ class EditForm extends React.Component {
 
     render() {
         return (
-            <form onSubmit={this.handleSubmit}>
-                <label>
-                    Название:
-                    <input type="text" value={this.state.value} onChange={this.handleChange} />
-                </label>
-                <input type="submit" value="Сохранить" className="btn btn-primary"/>
-            </form>
+            <div>
+                <Header user={user}/>
+                <form onSubmit={this.handleSubmit}>
+                    <label>
+                        Название:
+                        <input type="text" value={this.state.value} onChange={this.handleChange}/>
+                    </label>
+                    <input type="submit" value="Сохранить" className="btn btn-primary"/>
+                </form>
+            </div>
         );
     }
 }

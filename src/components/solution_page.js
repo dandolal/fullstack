@@ -2,7 +2,7 @@ import React from 'react';
 import {problems_list} from "./globals";
 import {Link} from "react-router-dom";
 
-class solution extends React.Component {
+class solution_page extends React.Component {
     constructor({match, location}) {
         super();
         const {params: {problem_id}} = match;
@@ -23,4 +23,4 @@ class solution extends React.Component {
     }
 }
 
-export default solution;
+export default solution_page;
