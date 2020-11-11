@@ -1,14 +1,13 @@
 import React from 'react'
-import {problems_list, user} from "./globals";
-import Header from "../model";
+import {connect} from "react-redux";
+import {toLogin} from "../action";
+import {Link} from "react-router-dom";
 
-class login extends React.Component {
+class Login extends React.Component {
     constructor(props) {
         super(props);
-        this.login = '';
-        this.password = '';
 
-        this.state = {isLogged: user.isLogged, login: user.name, password: ''};
+        this.state = {login: '', password: '', error: this.props.error};
 
         this.handleLoginChange = this.handleLoginChange.bind(this);
         this.handlePasswordChange = this.handlePasswordChange.bind(this);
@@ -20,34 +19,62 @@ class login extends React.Component {
     }
 
     handlePasswordChange(event) {
-        this.setState({password: event.target.password});
+        this.setState({password: event.target.value});
     }
 
     handleSubmit(event) {
-        event.preventDefault()
-        this.setState({isLogged: true, login: this.state.login})
-        user.name = this.state.login;
-        user.isLogged = true
+        event.preventDefault();
+        const {
+            login,
+            password
+        } = this.state;
 
-        this.props.history.push(`/`)
+
+        this.props.login(login, password).then(() => {
+            this.props.history.push('/');
+        }).catch((error) => {this.setState({login: '', password: '', error: error})})
     }
 
+    handleKeyDown = event => {
+        if (event.key === 'Enter') {
+            event.preventDefault();
+        }
+    }
+
+
+
+
     render() {
+        let {login, password} = this.state;
         return (
             <div>
-                <Header user={user}/>
-                <form onSubmit={this.handleSubmit}>
+
+                <form>
                     <label>
                         Логин:
-                        <input type="text" value={this.state.login} onChange={this.handleLoginChange}/>
+                        <input type="text" value={login} onChange={this.handleLoginChange} onKeyDown={this.handleKeyDown}/>
                         Пароль:
-                        <input type="password" value={this.state.password} onChange={this.handlePasswordChange}/>
+                        <input type="password" value={password} onChange={this.handlePasswordChange} onKeyDown={this.handleKeyDown}/>
                     </label>
-                    <button type="submit" value="Войти" className="btn btn-primary">Войти</button>
+                    <button type="submit" value="Войти" className="btn btn-primary" onClick={this.handleSubmit}>Войти</button>
                 </form>
+                <p style={{color: 'red'}}>{this.props.error}</p>
+                <Link to='/register' className="btn btn-primary">Зарегистрироваться</Link>
             </div>
         );
     }
 }
 
-export default login
+const mapStateToProps = (state) => {
+    return {
+        error: state.userReducer.error
+    }
+}
+
+const mapDispatchToProps = (dispatch) => {
+    return {
+        login: (...args) => dispatch(toLogin(...args)),
+    }
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Login);

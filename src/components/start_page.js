@@ -1,11 +1,10 @@
 import React from 'react';
-import {user} from "./globals";
-import Header from "../model";
+
 
 const start_page = () => {
     return (
         <div>
-            <Header user={user}/>
+
             <header className="w3-display-container" id="home"
                     style={{width: "100vw", height: "calc(100vh)"}}
                 >

@@ -1,10 +1,11 @@
 import React from 'react';
-import {problems_list} from "./globals";
+
 import {Link} from "react-router-dom";
+import {connect} from "react-redux";
 
 class solution_page extends React.Component {
-    constructor({match, location}) {
-        super();
+    constructor({match, props}) {
+        super(props);
         const {params: {problem_id}} = match;
         this.id = problem_id;
     }
@@ -13,7 +14,7 @@ class solution_page extends React.Component {
         return (
             <div>
                 <div>
-                    <h1>Я {problems_list[this.id].name} задача и ее решение </h1>
+                    <h1>Я {this.props.problems_list.get(Number(this.id)).name} задача и ее решение </h1>
                 </div>
                 <div>
                     <Link to={`/problem/${this.id}`} className="btn btn-primary">Условие</Link>
@@ -23,4 +24,15 @@ class solution_page extends React.Component {
     }
 }
 
-export default solution_page;
+const mapStateToProps = (state) => {
+    return {
+        problems_list: state.userReducer.problems
+    }
+}
+
+const mapDispatchToProps = (dispatch) => {
+    return {
+    }
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(solution_page);

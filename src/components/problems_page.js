@@ -1,16 +1,16 @@
 import React from 'react';
-import {Link} from "react-router-dom";
-import {problems_list, user} from "./globals";
-import Header from "../model";
+
 import {problems_background, problem_card_style} from "./styles";
+import {connect} from "react-redux";
 
 
 const problem_card = (props) =>{
+    console.log(props.problem[1])
         return (
-            <div style={problem_card_style} onClick={()=>{props.history.push(`/problem/${props.id}`)}}>
-                <h3 style={{padding: '4px 8px'}}>{props.problem.name}</h3>
-                <p style={{marginLeft: 'auto', marginRight: 'auto'}}>{props.problem.task}</p>
-                <p>{props.problem.author}</p>
+            <div style={problem_card_style} onClick={()=>{props.history.push(`/problem/${props.problem[0]}`)}}>
+                <h3 style={{padding: '4px 8px'}}>{props.problem[1].name}</h3>
+                <p style={{marginLeft: 'auto', marginRight: 'auto'}}>{props.problem[1].task}</p>
+                <p>{props.problem[1].author}</p>
             </div>
         )
 }
@@ -21,21 +21,36 @@ class problems_page extends React.Component {
         super(props);
     }
     render() {
-        return (
-            <div>
-                <Header user={user}/>
+        if (!this.props.problems_list) {
+            return (<h1>Loading...</h1>)
+        } else {
+            console.log(this.props.problems_list)
+            return (
+                <div>
 
-                <div style={problems_background}>
-                    <h1 style={{padding: '8px 16px', opacity: '1'}}>Задачи</h1>
-                    <div>
-                        {problems_list.map((problem, index) => (
-                            problem_card({problem: problem, id: index, history: this.props.history})
+
+                    <div style={problems_background}>
+                        <h1 style={{padding: '8px 16px', opacity: '1'}}>Задачи</h1>
+                        <div>{Array.from(this.props.problems_list).map((problem, index) => (
+                            problem_card({problem: problem, index: index, history: this.props.history})
                         ))}
+                        </div>
                     </div>
                 </div>
-            </div>
-        )
+            )
+        }
     }
 }
 
-export default problems_page;
+const mapStateToProps = (state) => {
+    return {
+        problems_list: state.userReducer.problems
+    }
+}
+
+const mapDispatchToProps = (dispatch) => {
+    return {
+    }
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(problems_page);

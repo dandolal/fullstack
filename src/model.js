@@ -1,13 +1,13 @@
 import React from 'react';
-import problems_page from "./components/problems_page";
 import {Link} from "react-router-dom";
-import {user} from "./components/globals";
+import {connect} from "react-redux";
+
 
 const user_button = (props) => {
     return (
-        <Link to={`/profile/${props.user.name}`}
+        <Link to={`/profile/${props.user.login}`}
               className="w3-bar-item w3-button w3-padding-16"><i
-            class="far fa-user"></i><b> {props.user.name}</b></Link>
+            class="far fa-user"></i><b> {props.user.login}</b></Link>
     )
 }
 
@@ -27,12 +27,14 @@ class Header extends React.Component {
 
     render() {
         let button;
-        if (this.props.user.isLogged) {
-            console.log(this.props.user.isLogged);
-            console.log(this.props.user.name);
+        if (!this.props.user || !this.props.user.isLogged) {
+            console.log(this.props.user)
+            console.log(')')
+            button = login_button()
+        } else {
             button = user_button(this.props);
-        } else
-            button = login_button();
+        }
+
         return (
 
             <div className="w3-bar w3-black  w3-card" id="myNavbar">
@@ -62,4 +64,18 @@ class Header extends React.Component {
     }
 }
 
-export default Header;
+const mapStateToProps = (state) => {
+    console.log("map sate to props", state.user)
+    console.log("map sate to props", state.userReducer.user)
+    return {
+        user: state.userReducer.user
+    }
+}
+
+const mapDispatchToProps = (dispatch) => {
+    return {}
+
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Header);
+
